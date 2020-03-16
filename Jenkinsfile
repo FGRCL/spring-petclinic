@@ -1,3 +1,6 @@
+import jenkins.model.*
+jenkins = Jenkins.instance
+
 if(env.BRANCH_NAME == 'master'){
 	pipeline {
 		agent any
