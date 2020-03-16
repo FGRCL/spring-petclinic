@@ -1,15 +1,15 @@
 pipeline { 
 	agent any 
-	//environment{
-		//def buildCount = 1
-		//def lastSuccessfulCommit = ""
-		//def currentCommit = sh (script: "git log -n 1 --pretty=format:'%H'", returnStdout: true)
-	//}
+	environment{
+		def buildCount = 1
+		def lastSuccessfulCommit = ""
+		def currentCommit = sh (script: "git log -n 1 --pretty=format:'%H'", returnStdout: true)
+	}
 	stages {
 		stage('Build') {
 			steps{
 				slackSend (color: '#00FF00', message: "Building: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
-				/*script{
+				script{
 					if(lastSuccessfulCommit != ""){
 						if(buildCount == 8){
 							buildCount = 1
@@ -23,7 +23,7 @@ pipeline {
 					} else {
 						sh 'mvn clean install'
 					}
-				}*/
+				}
 			}
 		}
 		stage('Test'){
@@ -49,9 +49,9 @@ pipeline {
 	post {
 		success {
 		  slackSend (color: '#00FF00', message: "SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
-		  //script{
-			//lastSuccessfulCommit = sh (script: "git log -n 1 --pretty=format:'%H'", returnStdout: true)
-		  //}
+		  script{
+			lastSuccessfulCommit = sh (script: "git log -n 1 --pretty=format:'%H'", returnStdout: true)
+		  }
 		}
 
 		failure {
