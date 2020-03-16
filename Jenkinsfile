@@ -15,7 +15,6 @@ pipeline {
 						if(buildCount == 8){
 							buildCount = 1
 							steps { 
-								slackSend (color: '#00FF00', message: "Building: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
 								sh 'mvn clean install'
 							}
 						} else {
@@ -26,7 +25,6 @@ pipeline {
 						}
 					} else {
 						steps { 
-							slackSend (color: '#00FF00', message: "Building: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
 							sh 'mvn clean install'
 						}
 					}
