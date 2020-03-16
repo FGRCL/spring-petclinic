@@ -1,6 +1,6 @@
 pipeline {
     agent any
-    stages {
+    node {
 		if(env.BRANCH_NAME == 'master'){
 			stage('Build') {
 				steps {
