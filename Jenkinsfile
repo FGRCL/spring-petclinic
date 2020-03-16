@@ -16,7 +16,7 @@ pipeline {
 							buildCount = 1
 							sh 'mvn clean install'
 						} else {
-							build += 1
+							buildCount += 1
 							echo 'Build ${buildCount}/8'
 							currentBuild.result = 'SUCCESS'
 							return
