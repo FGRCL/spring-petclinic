@@ -1,10 +1,12 @@
 pipeline {
     agent any
-    stages {
-        stage('Build') {
-            steps {
-                sh './mvnw package' 
-            }
-        }
-    }
+	if(env.BRANCH_NAME == 'master'){
+		stages {
+			stage('Build') {
+				steps {
+					sh './mvnw package' 
+				}
+			}
+		}
+	}
 }
