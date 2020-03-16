@@ -3,6 +3,9 @@ def lastSuccessfulCommit = ""
 
 pipeline { 
 	agent any 
+	environment{
+		def currentCommit = sh (script: "git log -n 1 --pretty=format:'%H'", returnStdout: true)
+	}
 	stages { 
 		stage('Build') {
 			steps{
@@ -53,12 +56,12 @@ pipeline {
 	post {
 		success {
 		  slackSend (color: '#00FF00', message: "SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
-		  lastSuccessfulCommit = env.GIT_COMMIT
+		  lastSuccessfulCommit = sh (script: "git log -n 1 --pretty=format:'%H'", returnStdout: true)
 		}
 
 		failure {
 		  slackSend (color: '#FF0000', message: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
-		  sh 'git bisect start ${env.GIT_COMMIT} ${lastSuccessfulCommit}'
+		  sh 'git bisect start ${currentCommit} ${lastSuccessfulCommit}'
 		  sh 'git bisect run mvn clean test'
 		  sh 'git bisect reset'
 		}
