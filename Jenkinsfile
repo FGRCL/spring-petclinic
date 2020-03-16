@@ -6,6 +6,17 @@ pipeline {
 		def currentCommit = sh (script: "git log -n 1 --pretty=format:'%H'", returnStdout: true)
 	}
 	stages {
+		stage('Validate parameters') {
+		when {
+			expression {
+			// Only run this stage if the targetEnv is invalid
+			!['dev', 'qa', 'staging'].contains(params.targetEnv)
+			}
+		}
+		steps {
+			// Abort the build, skipping subsequent stages
+			error("Invalid target environment: ${params.targetEnv}")
+		}
 		stage('Build') {
 			steps{
 				slackSend (color: '#00FF00', message: "Building: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
@@ -16,7 +27,9 @@ pipeline {
 							sh 'mvn clean install'
 						} else {
 							buildCount += 1
-							error('Build ${buildCount}/8')
+							steps{
+								error('Build ${buildCount}/8')
+							}
 							currentBuild.result = 'SUCCESS'
 							return
 						}
