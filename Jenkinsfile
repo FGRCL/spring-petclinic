@@ -14,9 +14,7 @@ pipeline {
 					if(lastSuccessfulCommit != ""){
 						if(buildCount == 8){
 							buildCount = 1
-							step('Proceed') { 
-								sh 'mvn clean install'
-							}
+							sh 'mvn clean install'
 						} else {
 							build += 1
 							echo 'Build ${buildCount}/8'
@@ -24,9 +22,7 @@ pipeline {
 							return
 						}
 					} else {
-						step('Proceed with first commit') { 
-							sh 'mvn clean install'
-						}
+						sh 'mvn clean install'
 					}
 				}
 			}
