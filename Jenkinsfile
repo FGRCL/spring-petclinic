@@ -9,7 +9,7 @@ pipeline {
 		stage('Build') {
 			steps{
 				slackSend (color: '#00FF00', message: "Building: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
-				script{
+				/*script{
 					if(lastSuccessfulCommit != ""){
 						if(buildCount == 8){
 							buildCount = 1
@@ -23,7 +23,7 @@ pipeline {
 					} else {
 						sh 'mvn clean install'
 					}
-				}
+				}*/
 			}
 		}
 		stage('Test'){
