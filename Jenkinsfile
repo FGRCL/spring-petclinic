@@ -1,11 +1,30 @@
+def buildCount = 1
+def lastSuccessfulCommit = ""
+
 pipeline { 
 	agent any 
 	stages { 
-		stage('Build') { 
-			steps { 
-				slackSend (color: '#00FF00', message: "Building: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
-				sh 'mvn clean install'
-			} 
+		stage('Build') {
+			if(lastSuccessfulCommit != ""){
+				if(buildCount == 8){
+					buildCount = 1
+					steps { 
+						slackSend (color: '#00FF00', message: "Building: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+						sh 'mvn clean install'
+					}
+				} else {
+					build += 1
+					echo 'Build ${buildCount}/8'
+					currentBuild.result = 'SUCCESS'
+					return
+				}
+			} else {
+				steps { 
+					slackSend (color: '#00FF00', message: "Building: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+					sh 'mvn clean install'
+				}
+			}
+			
 		}
 		stage('Test'){
 			steps { 
@@ -30,10 +49,14 @@ pipeline {
 	post {
 		success {
 		  slackSend (color: '#00FF00', message: "SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+		  lastSuccessfulCommit = GIT_COMMIT
 		}
 
 		failure {
 		  slackSend (color: '#FF0000', message: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+		  sh 'git bisect start ${GIT_COMMIT} ${lastSuccessfulCommit}'
+		  sh 'git bisect run mvn clean test'
+		  sh 'git bisect reset'
 		}
 	}	
 }
