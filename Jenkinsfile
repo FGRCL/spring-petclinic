@@ -1,10 +1,10 @@
+when{
+	branch "master"
+}
 pipeline {
     agent any
     stages {
 		stage ('begin'){
-			when{
-				branch "master"
-			}	
 			steps{
 
 				sh 'echo start'
