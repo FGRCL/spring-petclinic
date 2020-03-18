@@ -2,9 +2,9 @@ def buildCount = 1
 def lastSuccessfulCommit = ""
 pipeline { 
 	agent any 
-	//environment{
-		//def currentCommit = sh (script: "git log -n 1 --pretty=format:'%H'", returnStdout: true)
-	//}
+	environment{
+		def currentCommit = sh (script: "git log -n 1 --pretty=format:'%H'", returnStdout: true)
+	}
 	stages {
 		stage('Build') {
 			steps{
