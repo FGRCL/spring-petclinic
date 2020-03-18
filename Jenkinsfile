@@ -1,5 +1,5 @@
-//def buildCount = 1
-//def lastSuccessfulCommit = ""
+def buildCount = 1
+def lastSuccessfulCommit = ""
 pipeline { 
 	agent any 
 	//environment{
