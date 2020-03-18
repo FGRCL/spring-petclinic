@@ -2,7 +2,7 @@ pipeline {
 	agent any 
 	environment{
 		def buildCount = 1
-	def lastSuccessfulCommit = ""
+		def lastSuccessfulCommit = ""
 		def currentCommit = sh (script: "git log -n 1 --pretty=format:'%H'", returnStdout: true)
 	}
 	stages {
@@ -13,7 +13,7 @@ pipeline {
 				sh 'echo "lastSuccessfulCommit = ${lastSuccessfulCommit}"'
 				sh 'echo "currentCommit = ${currentCommit}"'
 				script{
-					if(lastSuccessfulCommit != ""){
+					if(env.lastSuccessfulCommit != ""){
 						if(buildCount == 8){
 							buildCount = 1
 							sh 'echo "this is a successful build process"'
