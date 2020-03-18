@@ -13,38 +13,16 @@ pipeline {
 					if(lastSuccessfulCommit != ""){
 						if(buildCount == 8){
 							buildCount = 1
-							sh 'mvn clean install'
+							sh './mvnw package'
 						} else {
 							buildCount += 1
-							step {
-								error('Build ${buildCount}/8')
-							}
 							currentBuild.result = 'SUCCESS'
-							return
+							error('Build ${buildCount}/8')
 						}
 					} else {
-						sh 'mvn clean install'
+						sh './mvnw package'
 					}
 				}
-			}
-		}
-		stage('Test'){
-			steps { 
-				slackSend (color: '#00FF00', message: "Testing: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
-				sh 'mvn test'
-			} 
-		}
-		stage('package'){
-			steps { 
-				slackSend (color: '#00FF00', message: "Packaging: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
-				sh './mvnw package'
-				
-			}
-		}
-		stage('deploy'){
-			steps { 
-				slackSend (color: '#00FF00', message: "Deploying: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
-				sh './mvnw deploy -DaltDeploymentRepository=internal.repo::default::"file:///mnt/c/Users/Fgrcl/My Cloud/Semester 6/SOEN  345/ASSIGNMENTS/a6/Jenkins/Deploy"'
 			}
 		}
 	}
