@@ -9,20 +9,21 @@ pipeline {
 		stage('Build') {
 			steps{
 				slackSend (color: '#00FF00', message: "Building: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
-				script{
-					if(lastSuccessfulCommit != ""){
-						if(buildCount == 8){
-							buildCount = 1
-							sh './mvnw package'
-						} else {
-							buildCount += 1
-							currentBuild.result = 'SUCCESS'
-							error('Build ${buildCount}/8')
-						}
-					} else {
-						sh './mvnw package'
-					}
-				}
+				sh './mvnw package'
+			//	script{
+			//		if(lastSuccessfulCommit != ""){
+			//			if(buildCount == 8){
+			//				buildCount = 1
+			//				sh './mvnw package'
+			//			} else {
+			//				buildCount += 1
+			//				currentBuild.result = 'SUCCESS'
+			//				error('Build ${buildCount}/8')
+			//			}
+			//		} else {
+			//			sh './mvnw package'
+			//		}
+			//	}
 			}
 		}
 	}
@@ -30,9 +31,7 @@ pipeline {
 		success {
 			steps{
 		  		slackSend (color: '#00FF00', message: "SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
-				script{
-					lastSuccessfulCommit = sh (script: "git log -n 1 --pretty=format:'%H'", returnStdout: true)	
-				}
+				lastSuccessfulCommit = sh (script: "git log -n 1 --pretty=format:'%H'", returnStdout: true)	
 			}
 		}
 
