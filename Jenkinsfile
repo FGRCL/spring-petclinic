@@ -9,23 +9,20 @@ pipeline {
 		stage('Build') {
 			steps{
 				slackSend (color: '#00FF00', message: "Building: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
-				sh 'echo "buildCount = ${buildCount}"'
-				sh 'echo "lastSuccessfulCommit = ${lastSuccessfulCommit}"'
-				sh 'echo "currentCommit = ${currentCommit}"'
 				script{
 					sh 'echo "buildCount = ${buildCount}"'
 					sh 'echo "lastSuccessfulCommit = ${lastSuccessfulCommit}"'
 					sh 'echo "currentCommit = ${currentCommit}"'
-					if(env.lastSuccessfulCommit == "none"){
-						sh 'echo "this is a successful build process"'
+					if(lastSuccessfulCommit == "none"){
+						sh 'echo "this is the first commit"'
 					} else {
 						if(buildCount == 8){
 							buildCount = 1
-							sh 'echo "this is a successful build process"'
+							sh 'echo "this is the eigth commit, build it"'
 						} else {
 							buildCount += 1
 							currentBuild.result = 'SUCCESS'
-							error('Build ${buildCount}/8')
+							sh 'echo "this is commit ${buildCount}/8, skipping"'
 						}
 					}
 				}
