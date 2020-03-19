@@ -13,6 +13,9 @@ pipeline {
 				sh 'echo "lastSuccessfulCommit = ${lastSuccessfulCommit}"'
 				sh 'echo "currentCommit = ${currentCommit}"'
 				script{
+					sh 'echo "buildCount = ${buildCount}"'
+					sh 'echo "lastSuccessfulCommit = ${lastSuccessfulCommit}"'
+					sh 'echo "currentCommit = ${currentCommit}"'
 					if(env.lastSuccessfulCommit != ""){
 						if(buildCount == 8){
 							buildCount = 1
