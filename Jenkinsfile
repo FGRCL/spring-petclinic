@@ -1,8 +1,8 @@
 pipeline { 
 	agent any 
 	environment{
-		def buildCount = 1
-		def lastSuccessfulCommit = "none"
+		def buildCount = readFile('buildCount')
+		def lastSuccessfulCommit = readFile('lastSuccessfulCommit')
 		def currentCommit = sh (script: "git log -n 1 --pretty=format:'%H'", returnStdout: true)
 	}
 	stages {
@@ -30,10 +30,11 @@ pipeline {
 		}
 	}
 	post {
+		writeFile('buildCount', buildCount)
 		success {
 		  	slackSend (color: '#00FF00', message: "SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
 			script{
-				lastSuccessfulCommit = sh (script: "git log -n 1 --pretty=format:'%H'", returnStdout: true)	
+				writeFile('lastSuccessfulCommit', currentCommit)
 			}
 		}
 
