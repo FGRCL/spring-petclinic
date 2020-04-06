@@ -3,7 +3,7 @@ pipeline {
 	environment{
 		def buildCount = readFile('buildCount')
 		def lastSuccessfulCommit = readFile('lastSuccessfulCommit')
-		def currentCommit = env.GIT_COMMIT
+		def currentCommit = "env.GIT_COMMIT"
 	}
 	stages {
 		stage('Build') {
@@ -35,6 +35,7 @@ pipeline {
       slackSend(color: '#00FF00', message: "SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
       script {
         lastSuccessfulCommit = sh (script: "git log -n 1 --pretty=format:'%H'", returnStdout: true)
+		writeFile()
       }
 	}
 
