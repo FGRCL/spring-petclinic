@@ -28,6 +28,13 @@ pipeline {
 				}
 			}
 		}
+		stage('Update build count'){
+			steps{
+				script{
+					writeFile('buildCount', buildCount)
+				}
+			}
+		}
 	}
 
   post {
@@ -44,8 +51,6 @@ pipeline {
       sh "git bisect start ${currentCommit} ${lastSuccessfulCommit}"
       sh 'git bisect run mvn clean test'
       sh 'git bisect reset'
-    }
-
-	writeFile('buildCount', buildCount)
+	}
   }
 }
