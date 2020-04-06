@@ -1,22 +1,27 @@
-def buildCountExists = fileExists 'buildCount'
-if(buildCountExists){
-	def buildCount = readFile('buildCount')
-}else{
-	def buildCount = 1;
-}
-
-def lastSuccessfulCommitExists = fileExists 'lastSuccessfulCommit'
-if(lastSuccessfulCommitExists){
-	def lastSuccessfulCommit = readFile('lastSuccessfulCommit')
-}else{
-	def lastSuccessfulCommit = "none"
-}
-def currentCommit = "env.GIT_COMMIT"
-
 pipeline { 
 	agent any 
 
 	stages {
+		stage('Setup variables'){
+			steps{
+				script{
+					def buildCountExists = fileExists 'buildCount'
+					if(buildCountExists){
+						def buildCount = readFile('buildCount')
+					}else{
+						def buildCount = 1;
+					}
+
+					def lastSuccessfulCommitExists = fileExists 'lastSuccessfulCommit'
+					if(lastSuccessfulCommitExists){
+						def lastSuccessfulCommit = readFile('lastSuccessfulCommit')
+					}else{
+						def lastSuccessfulCommit = "none"
+					}
+					def currentCommit = "env.GIT_COMMIT"
+				}
+			}
+		}
 		stage('Build') {
 			steps{
 				slackSend (color: '#00FF00', message: "Building: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
