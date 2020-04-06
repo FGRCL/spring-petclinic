@@ -1,3 +1,6 @@
+def buildCount
+def lastSuccessfulCommit
+def currentCommit
 pipeline { 
 	agent any 
 
@@ -7,18 +10,18 @@ pipeline {
 				script{
 					def buildCountExists = fileExists 'buildCount'
 					if(buildCountExists){
-						def buildCount = readFile('buildCount')
+						buildCount = readFile('buildCount')
 					}else{
-						def buildCount = 1;
+						buildCount = 1;
 					}
 
 					def lastSuccessfulCommitExists = fileExists 'lastSuccessfulCommit'
 					if(lastSuccessfulCommitExists){
-						def lastSuccessfulCommit = readFile('lastSuccessfulCommit')
+						lastSuccessfulCommit = readFile('lastSuccessfulCommit')
 					}else{
-						def lastSuccessfulCommit = "none"
+						lastSuccessfulCommit = "none"
 					}
-					def currentCommit = "env.GIT_COMMIT"
+					currentCommit = "env.GIT_COMMIT"
 				}
 			}
 		}
