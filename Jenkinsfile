@@ -1,5 +1,16 @@
-def buildCount = readFile('buildCount')
-def lastSuccessfulCommit = readFile('lastSuccessfulCommit')
+def buildCountExists = fileExists 'buildCount'
+if(buildCountExists){
+	def buildCount = readFile('buildCount')
+}else{
+	def buildCount = 1;
+}
+
+def lastSuccessfulCommitExists = fileExists 'lastSuccessfulCommit'
+if(lastSuccessfulCommitExists){
+	def lastSuccessfulCommit = readFile('lastSuccessfulCommit')
+}else{
+	def lastSuccessfulCommit = "none"
+}
 def currentCommit = "env.GIT_COMMIT"
 
 pipeline { 
