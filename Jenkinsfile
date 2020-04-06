@@ -3,7 +3,7 @@ pipeline {
 	environment{
 		def buildCount = readFile('buildCount')
 		def lastSuccessfulCommit = readFile('lastSuccessfulCommit')
-		def currentCommit = sh (script: "git log -n 1 --pretty=format:'%H'", returnStdout: true)
+		def currentCommit = env.GIT_COMMIT
 	}
 	stages {
 		stage('Build') {
