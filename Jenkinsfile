@@ -29,9 +29,9 @@ pipeline {
 			steps{
 				slackSend (color: '#00FF00', message: "Building: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
 				script{
-					sh 'echo "buildCount = ${buildCount}"'
-					sh 'echo "lastSuccessfulCommit = ${lastSuccessfulCommit}"'
-					sh 'echo "currentCommit = ${currentCommit}"'
+					echo "buildCount = ${buildCount}"
+					echo "lastSuccessfulCommit = ${lastSuccessfulCommit}"
+					echo "currentCommit = ${currentCommit}"
 					if(buildCount == 8){
 						buildCount = 1
 						sh 'echo "this is the eigth commit, build it"'
