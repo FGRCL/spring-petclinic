@@ -50,6 +50,7 @@ pipeline {
 		stage('Update build count'){
 			steps{
 				script{
+					sh 'echo "new buildCount = ${buildCount}"'
 					writeFile('buildCount', buildCount)
 				}
 			}
