@@ -32,9 +32,6 @@ pipeline {
 					sh 'echo "buildCount = ${buildCount}"'
 					sh 'echo "lastSuccessfulCommit = ${lastSuccessfulCommit}"'
 					sh 'echo "currentCommit = ${currentCommit}"'
-					if(lastSuccessfulCommit == "none"){
-						sh 'echo "this is the first commit"'
-					} else {
 						if(buildCount == 8){
 							buildCount = 1
 							sh 'echo "this is the eigth commit, build it"'
