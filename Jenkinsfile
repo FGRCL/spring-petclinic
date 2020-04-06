@@ -8,6 +8,7 @@ pipeline {
 		stage('Setup variables'){
 			steps{
 				script{
+					currentCommit = "env.GIT_COMMIT"
 					def buildCountExists = fileExists 'buildCount'
 					if(buildCountExists){
 						buildCount = readFile('buildCount')
@@ -19,9 +20,8 @@ pipeline {
 					if(lastSuccessfulCommitExists){
 						lastSuccessfulCommit = readFile('lastSuccessfulCommit')
 					}else{
-						lastSuccessfulCommit = "none"
+						lastSuccessfulCommit = currentCommit
 					}
-					currentCommit = "env.GIT_COMMIT"
 				}
 			}
 		}
