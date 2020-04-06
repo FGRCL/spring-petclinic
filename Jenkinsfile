@@ -32,14 +32,13 @@ pipeline {
 					sh 'echo "buildCount = ${buildCount}"'
 					sh 'echo "lastSuccessfulCommit = ${lastSuccessfulCommit}"'
 					sh 'echo "currentCommit = ${currentCommit}"'
-						if(buildCount == 8){
-							buildCount = 1
-							sh 'echo "this is the eigth commit, build it"'
-						} else {
-							buildCount += 1
-							currentBuild.result = 'SUCCESS'
-							sh 'echo "this is commit ${buildCount}/8, skipping"'
-						}
+					if(buildCount == 8){
+						buildCount = 1
+						sh 'echo "this is the eigth commit, build it"'
+					} else {
+						buildCount += 1
+						currentBuild.result = 'SUCCESS'
+						sh 'echo "this is commit ${buildCount}/8, skipping"'
 					}
 				}
 			}
